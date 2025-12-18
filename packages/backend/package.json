@@ -1,0 +1,21 @@
+{
+  "name": "@workspace/backend",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./src/elysia.ts",
+    "./elysia": "./src/elysia.ts",
+    "./routes/*": "./src/routes/*.ts",
+    "./lib/*": "./src/lib/*.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.9",
+    "@workspace/typescript-config": "workspace:*",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@elysiajs/eden": "^1.4.5",
+    "elysia": "^1.4.19"
+  }
+}
