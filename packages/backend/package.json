@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "type": "module",
   "private": true,
+  "scripts": {},
   "exports": {
-    ".": "./src/elysia.ts",
     "./elysia": "./src/elysia.ts",
     "./routes/*": "./src/routes/*.ts",
     "./lib/*": "./src/lib/*.ts"
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@elysiajs/eden": "^1.4.5",
+    "@workspace/database": "workspace:*",
     "elysia": "^1.4.19"
   }
 }

@@ -1,0 +1,31 @@
+import {
+  Prisma,
+  PrismaClient,
+} from "@workspace/database/lib/generatedDb/client";
+import { withAccelerate } from "@prisma/extension-accelerate";
+
+// Helper to instantiate a PrismaClient extended with accelerate
+function createDbClient(url: string) {
+  return new PrismaClient({ accelerateUrl: url }).$extends(withAccelerate());
+}
+export type DbClient = ReturnType<typeof createDbClient>;
+
+// Cache Prisma clients by their connection URL on the global object
+declare global {
+  var prismaClients: Record<string, DbClient> | undefined;
+}
+
+export const getDb = (DATABASE_URL: string): DbClient => {
+  if (!DATABASE_URL) {
+    throw new Error("Missing DATABASE_URL configuration");
+  }
+  if (!globalThis.prismaClients) {
+    globalThis.prismaClients = {};
+  }
+  if (!globalThis.prismaClients[DATABASE_URL]) {
+    globalThis.prismaClients[DATABASE_URL] = createDbClient(DATABASE_URL);
+  }
+  return globalThis.prismaClients[DATABASE_URL]!;
+};
+
+export { Prisma };

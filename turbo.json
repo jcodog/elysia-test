@@ -1,11 +1,52 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalEnv": ["ACCELERATE_URL", "DATABASE_URL"],
+  "globalDependencies": ["apps/web/.env"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "apps/web/.env"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": ["ACCELERATE_URL", "DATABASE_URL"]
+    },
+    "db:generate": {
+      "cache": false,
+      "inputs": ["prisma/schema.prisma", "apps/web/.env"],
+      "env": ["ACCELERATE_URL", "DATABASE_URL"]
+    },
+    "db:push": {
+      "cache": false,
+      "inputs": ["prisma/schema.prisma", "apps/web/.env"],
+      "env": ["ACCELERATE_URL", "DATABASE_URL"]
+    },
+    "db:migrate": {
+      "cache": false,
+      "inputs": ["prisma/schema.prisma", "apps/web/.env"],
+      "env": ["ACCELERATE_URL", "DATABASE_URL"]
+    },
+    "db:studio": {
+      "cache": false,
+      "inputs": ["prisma/schema.prisma", "apps/web/.env"],
+      "env": ["ACCELERATE_URL", "DATABASE_URL"]
+    },
+    "db:pull": {
+      "cache": false,
+      "inputs": ["prisma/schema.prisma", "apps/web/.env"],
+      "env": ["ACCELERATE_URL", "DATABASE_URL"]
+    },
+    "db:validate": {
+      "cache": false,
+      "inputs": ["prisma/schema.prisma", "apps/web/.env"],
+      "env": ["ACCELERATE_URL", "DATABASE_URL"]
+    },
+    "db:format": {
+      "cache": false,
+      "inputs": ["prisma/schema.prisma", "apps/web/.env"],
+      "env": ["ACCELERATE_URL", "DATABASE_URL"]
+    },
+    "auth:generate": {
+      "cache": false
     },
     "lint": {
       "dependsOn": ["^lint"]

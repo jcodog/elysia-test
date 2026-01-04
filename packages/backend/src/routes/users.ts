@@ -4,6 +4,7 @@ export const users = new Elysia({ prefix: "/users" })
   .get(
     "/find",
     ({ query }) => {
+      console.log(process.env.TEST_VAR);
       console.log(`finding user: ${query.name}`);
       return {
         nameFound: query.name,

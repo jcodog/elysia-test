@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/lib/generatedDb"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Event {
+  id               String         @id
+  formattedMessage String
+  userId           String
+  name             String
+  fields           Json
+  deliveryStatus   DeliveryStatus @default(PENDING)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime
+  eventCategoryId  String?
+  EventCategory    EventCategory? @relation(fields: [eventCategoryId], references: [id])
+  User             User           @relation(fields: [userId], references: [id])
+
+  @@index([createdAt])
+}
+
+model EventCategory {
+  id        String   @id
+  name      String
+  color     Int
+  emoji     String?
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  Event     Event[]
+  User      User     @relation(fields: [userId], references: [id])
+
+  @@unique([name, userId])
+}
+
+model Quota {
+  id        String   @id
+  userId    String   @unique
+  year      Int
+  month     Int
+  count     Int      @default(0)
+  updatedAt DateTime
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id            String          @id
+  externalId    String?         @unique
+  quotaLimit    Int
+  plan          Plan            @default(FREE)
+  email         String          @unique
+  apiKey        String          @unique
+  discordId     String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime
+  Event         Event[]
+  EventCategory EventCategory[]
+  Quota         Quota?
+
+  @@index([email, apiKey])
+}
+
+enum DeliveryStatus {
+  PENDING
+  DELIVERED
+  FAILED
+}
+
+enum Plan {
+  FREE
+  PRO
+  OWNER
+}
