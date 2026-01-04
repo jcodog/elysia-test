@@ -15,17 +15,19 @@ declare global {
   var prismaClients: Record<string, DbClient> | undefined;
 }
 
-export const getDb = (DATABASE_URL: string): DbClient => {
-  if (!DATABASE_URL) {
-    throw new Error("Missing DATABASE_URL configuration");
+export const getDb = (databaseUrl: string): DbClient => {
+  if (!databaseUrl) {
+    throw new Error(
+      "Missing database configuration: set ACCELERATE_URL or DATABASE_URL."
+    );
   }
   if (!globalThis.prismaClients) {
     globalThis.prismaClients = {};
   }
-  if (!globalThis.prismaClients[DATABASE_URL]) {
-    globalThis.prismaClients[DATABASE_URL] = createDbClient(DATABASE_URL);
+  if (!globalThis.prismaClients[databaseUrl]) {
+    globalThis.prismaClients[databaseUrl] = createDbClient(databaseUrl);
   }
-  return globalThis.prismaClients[DATABASE_URL]!;
+  return globalThis.prismaClients[databaseUrl]!;
 };
 
 export { Prisma };
