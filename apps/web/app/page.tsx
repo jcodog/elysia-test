@@ -14,10 +14,16 @@ import {
   DialogTrigger,
 } from "@workspace/ui/components/ui/dialog";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const getUser = async () => {
-  const user = await client.users.find.get({ query: { name: "robert" } });
-  return user.data?.nameFound;
+  const result = await client.users.find.get({ query: { name: "robert" } });
+  if (!result.data || !result.data?.user) {
+    toast.error(`No user found with name robert`);
+    return;
+  }
+
+  return result.data?.user?.name;
 };
 
 export default function Page() {
