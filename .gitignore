@@ -35,4 +35,4 @@ npm-debug.log*
 .DS_Store
 *.pem
 
-packages/database/src/lib/generatedDb
+packages/backend/src/lib/generatedDb
