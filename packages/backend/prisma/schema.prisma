@@ -1,77 +1,71 @@
 generator client {
   provider = "prisma-client"
-  output   = "../src/lib/generatedDb"
+  output   = "../src/lib/generateDb"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-model Event {
-  id               String         @id
-  formattedMessage String
-  userId           String
-  name             String
-  fields           Json
-  deliveryStatus   DeliveryStatus @default(PENDING)
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime
-  eventCategoryId  String?
-  EventCategory    EventCategory? @relation(fields: [eventCategoryId], references: [id])
-  User             User           @relation(fields: [userId], references: [id])
-
-  @@index([createdAt])
-}
-
-model EventCategory {
-  id        String   @id
-  name      String
-  color     Int
-  emoji     String?
-  userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  Event     Event[]
-  User      User     @relation(fields: [userId], references: [id])
-
-  @@unique([name, userId])
-}
-
-model Quota {
-  id        String   @id
-  userId    String   @unique
-  year      Int
-  month     Int
-  count     Int      @default(0)
-  updatedAt DateTime
-  User      User     @relation(fields: [userId], references: [id])
-}
-
 model User {
-  id            String          @id
-  externalId    String?         @unique
-  quotaLimit    Int
-  plan          Plan            @default(FREE)
-  email         String          @unique
-  apiKey        String          @unique
-  discordId     String?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime
-  Event         Event[]
-  EventCategory EventCategory[]
-  Quota         Quota?
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
 
-  @@index([email, apiKey])
+  @@unique([email])
+  @@map("user")
 }
 
-enum DeliveryStatus {
-  PENDING
-  DELIVERED
-  FAILED
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
 }
 
-enum Plan {
-  FREE
-  PRO
-  OWNER
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }

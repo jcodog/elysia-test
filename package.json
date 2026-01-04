@@ -14,15 +14,14 @@
     "db:pull": "turbo run db:pull",
     "db:validate": "turbo run db:validate",
     "db:format": "turbo run db:format",
-    "auth:generate": "turbo run auth:generate"
+    "auth:generate": "bun --env-file=%CD%/apps/web/.env turbo run auth:generate --filter=@workspace/backend"
   },
   "devDependencies": {
+    "@better-auth/cli": "^1.4.10",
     "@types/minimatch": "^6.0.0",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "@workspace/backend": "workspace:*",
-    "@workspace/database": "workspace:*",
-    "@workspace/auth": "workspace:*",
     "prettier": "^3.7.4",
     "turbo": "^2.7.2",
     "typescript": "5.9.3"

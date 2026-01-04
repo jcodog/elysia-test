@@ -46,7 +46,8 @@
       "env": ["ACCELERATE_URL", "DATABASE_URL"]
     },
     "auth:generate": {
-      "cache": false
+      "cache": false,
+      "outputs": ["packages/backend/prisma/schema.prisma"]
     },
     "lint": {
       "dependsOn": ["^lint"]

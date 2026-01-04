@@ -1,7 +1,7 @@
 import {
   Prisma,
   PrismaClient,
-} from "@workspace/database/lib/generatedDb/client";
+} from "@workspace/backend/lib/generatedDb/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
 // Helper to instantiate a PrismaClient extended with accelerate
